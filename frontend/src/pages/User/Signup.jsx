@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import Navbar from '../components/Navbar';
-import signupImage from '../assets/turf.jpeg'; // Importing the left-side image
+import Navbar from '../../components/Navbar';
+import signupImage from '../../assets/turf.jpeg'; // Importing the left-side image
 
 const Signup = () => {
   const [formData, setFormData] = useState({

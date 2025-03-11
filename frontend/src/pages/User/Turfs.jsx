@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import Navbar from '../components/Navbar';
-import turfImage from '../assets/turf.jpeg';
+import Navbar from '../../components/Navbar';
+import turfImage from '../../assets/turf.jpeg';
 
 const dummyTurfs = [
   { id: 1, name: 'GreenField Turf', location: 'Ernakulam, Kerala', distance: '2 km', price: 500 },

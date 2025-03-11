@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import background from "../assets/turfimage.jpeg";
-import Navbar from "../components/Navbar";
+import background from "../../assets/turfimage.jpeg";
+import Navbar from "../../components/Navbar";
 
 const Home = () => {
   return (
