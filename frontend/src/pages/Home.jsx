@@ -15,10 +15,8 @@ const Home = () => {
         height: "100vh"
       }}
     >
-      {/* Navbar */}
       <Navbar />
 
-      {/* Main Content - Responsive */}
       <div className="flex flex-1 flex-col md:flex-row items-center justify-center gap-6 px-6 md:px-12 bg-black/50 p-6 text-center md:text-left">
         {/* Left Content - Welcome Message */}
         <div className="text-white max-w-lg">
@@ -31,8 +29,8 @@ const Home = () => {
         </div>
 
         {/* Right Content - Booking Button (Stacked on Small Screens) */}
-        <Link to="/booking">
-          <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-3 px-6 rounded-lg text-base sm:text-lg shadow-lg mt-4 md:mt-0">
+        <Link to="/turfs">
+          <button className="bg-green-500 hover:bg-green-700 cursor-pointer text-white font-bold py-3 px-6 rounded-lg text-base sm:text-lg shadow-lg mt-4 md:mt-0">
             Book Your Spot Now
           </button>
         </Link>

@@ -8,7 +8,7 @@ const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <nav className="fixed top-0 left-0 w-full bg-black/50 shadow-md z-50 h-20 flex items-center">
+    <nav className="fixed top-0 left-0 w-full bg-emerald-950 shadow-md z-50 h-20 flex items-center">
       <div className="container mx-auto flex items-center justify-between px-6 md:px-12">
         
         {/* Logo on the left */}
@@ -33,8 +33,8 @@ const Navbar = () => {
           }`}
         >
           <Link to="/" className="text-white hover:text-blue-500 text-lg py-2 md:py-0 px-4 md:px-0">Home</Link>
+          <Link to="/turfs" className="text-white hover:text-blue-500 text-lg py-2 md:py-0 px-4 md:px-0">Book</Link>
           <Link to="/about" className="text-white hover:text-blue-500 text-lg py-2 md:py-0 px-4 md:px-0">About</Link>
-          <Link to="/services" className="text-white hover:text-blue-500 text-lg py-2 md:py-0 px-4 md:px-0">Services</Link>
           <Link to="/contact" className="text-white hover:text-blue-500 text-lg py-2 md:py-0 px-4 md:px-0">Contact</Link>
           <Link to="/blog" className="text-white hover:text-blue-500 text-lg py-2 md:py-0 px-4 md:px-0">Blog</Link>
 
