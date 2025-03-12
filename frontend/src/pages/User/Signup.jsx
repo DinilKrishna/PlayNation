@@ -1,33 +1,54 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
-import signupImage from '../../assets/turf.jpeg'; // Importing the left-side image
+import signupImage from '../../assets/turf.jpeg';
+import { registerUser } from "../../api/auth"; // Import API function
 
 const Signup = () => {
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    password: '',
-    confirmPassword: '',
-  });
-  const [error, setError] = useState('');
   const navigate = useNavigate();
+
+  const [formData, setFormData] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirm_password: "",
+  });
+
+  const [errorMessage, setErrorMessage] = useState("");
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    if (formData.password !== formData.confirmPassword) {
-      setError('Passwords do not match');
-      return;
+    setErrorMessage(""); // Clear previous errors
+
+    try {
+        const response = await axios.post("http://localhost:8000/api/user/register/", formData);
+        alert(response.data.message); // Show success message
+        navigate("/login"); // Redirect to login page after successful signup
+    } catch (error) {
+        if (error.response && error.response.data) {
+            const errors = error.response.data;
+            if (typeof errors === "string") {
+                setErrorMessage(errors); // For generic error messages
+            } else if (errors.email) {
+                setErrorMessage(errors.email[0]); // Show specific email error
+            } else if (errors.username) {
+                setErrorMessage(errors.username[0]);
+            } else if (errors.password) {
+                setErrorMessage(errors.password[0]);
+            } else if (errors.confirm_password) {
+                setErrorMessage(errors.confirm_password[0]);
+            } else {
+                setErrorMessage("Something went wrong. Please try again.");
+            }
+        } else {
+            setErrorMessage(error.message || "Some error occurred.");
+        }
     }
-    setError('');
-    // Add signup logic here (API call, validation, etc.)
-    console.log('Signup successful:', formData);
-    navigate('/login'); // Redirect to login after successful signup
-  };
+};
 
   return (
     <div className="min-h-screen w-full bg-white text-gray-800 relative overflow-hidden">
@@ -72,16 +93,16 @@ const Signup = () => {
             />
             <input
               type="password"
-              name="confirmPassword"
+              name="confirm_password"
               placeholder="Confirm Password"
-              value={formData.confirmPassword}
+              value={formData.confirm_password}
               onChange={handleChange}
               className="border border-gray-300 p-3 rounded-md mb-4 focus:outline-none focus:ring-2 focus:ring-green-500"
               required
             />
 
             {/* Error Message */}
-            {error && <p className="text-red-500 mb-4">{error}</p>}
+            {errorMessage && <p style={{ color: "red" }}>{errorMessage}</p>}
 
             {/* Buttons */}
             <div className="flex justify-around">
