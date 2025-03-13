@@ -2,6 +2,7 @@ import re
 from rest_framework import serializers
 from .models import UserProfile
 from django.contrib.auth import authenticate
+from rest_framework_simplejwt.tokens import RefreshToken
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     confirm_password = serializers.CharField(write_only=True)
@@ -49,7 +50,29 @@ class UserLoginSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
 
     def validate(self, data):
-        user = authenticate(email=data["email"], password=data["password"])
+        email = data.get("email")
+        password = data.get("password")
+        print("Received Data:", data)  # Debugging
+        
+        if not email or not password:
+            raise serializers.ValidationError("Email and password are required.")
+
+        user = authenticate(email=email, password=password)
+        print("Authenticated User:", user)  # Debugging
+        
         if not user:
-            raise serializers.ValidationError("Invalid login credentials")
-        return user
+            raise serializers.ValidationError("Invalid credentials. Please try again.")
+
+        if not user.is_active:
+            raise serializers.ValidationError("Your account has been blocked.")
+
+        refresh = RefreshToken.for_user(user)
+        return {
+            "refresh": str(refresh),
+            "access": str(refresh.access_token),
+            "user": {
+                "id": user.id,
+                "email": user.email,
+                "username": user.username,
+            },
+        }

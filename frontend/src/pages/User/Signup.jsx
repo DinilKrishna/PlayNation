@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
 import signupImage from '../../assets/turf.jpeg';
+import axiosInstance from '../../api/axios';
 import { registerUser } from "../../api/auth"; // Import API function
 
 const Signup = () => {
@@ -25,7 +26,7 @@ const Signup = () => {
     setErrorMessage(""); // Clear previous errors
 
     try {
-        const response = await axios.post("http://localhost:8000/api/user/register/", formData);
+        const response = await axiosInstance.post("http://localhost:8000/api/user/register/", formData);
         alert(response.data.message); // Show success message
         navigate("/login"); // Redirect to login page after successful signup
     } catch (error) {

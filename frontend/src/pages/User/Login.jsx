@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import Navbar from '../../components/Navbar';
-import loginImage from '../../assets/turf.jpeg'; // Importing the right-side image
+import loginImage from '../../assets/turf.jpeg';
+import { loginUser } from '../../api/auth'; // Import login function
+import useAuthStore from '../../store/authStore';
 
 const Login = () => {
   const [formData, setFormData] = useState({
@@ -15,16 +17,32 @@ const Login = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const { setToken } = useAuthStore();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
+  
     if (!formData.email || !formData.password) {
-      setError('Please fill in all fields');
+      setError("Please fill in all fields");
       return;
     }
-    setError('');
-    // Add login logic here (API call, validation, etc.)
-    console.log('Login successful:', formData);
-    navigate('/'); // Redirect to home after successful login
+  
+    try {
+      const response = await loginUser(formData);
+      
+      console.log("Login Response:", response); // Debugging
+  
+      if (response.access) {
+        setToken(response.access); // Update Zustand store
+        navigate("/turfs"); // Redirect after login
+      } else {
+        setError(response.error || "Invalid credentials.");
+      }
+    } catch (error) {
+      console.error("Login Error:", error);
+      setError("Something went wrong. Please try again.");
+    }
   };
 
   return (

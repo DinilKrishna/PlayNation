@@ -153,3 +153,10 @@ CORS_ALLOW_HEADERS = ["*"]  # Allow all headers
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",  # Your frontend URL
 ]
+
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # Default Django authentication
+]
+
+AUTH_USER_MODEL = 'user.UserProfile'
