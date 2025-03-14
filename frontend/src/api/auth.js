@@ -34,3 +34,17 @@ export const loginUser = async (formData) => {
   }
 };
 
+export const logoutUser = async () => {
+  try {
+    const refreshToken = localStorage.getItem("refreshToken");
+    if (refreshToken) {
+      await API.post("/user/logout/", { refresh_token: refreshToken });
+    }
+  } catch (error) {
+    console.error("Logout Error:", error.response?.data || "Something went wrong");
+  } finally {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refreshToken");
+    useAuthStore.getState().logout();
+  }
+};

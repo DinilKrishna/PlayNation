@@ -74,7 +74,7 @@ const Turfs = () => {
 
           {/* Location Filter */}
           <label className="block text-gray-700 mb-1">Location</label>
-          <select name="location" className="w-full p-2 mb-4 border rounded cursor-pointer" onChange={handleFilterChange}>
+          <select name="location" className="w-full p-2 mb-4 bg-gray-200 rounded cursor-pointer" onChange={handleFilterChange}>
             <option value="">Select Location</option>
             <option value="Ernakulam">Ernakulam</option>
             <option value="Kochi">Kochi</option>
@@ -105,7 +105,7 @@ const Turfs = () => {
             <div className="lg:hidden bg-gray-100 p-4 rounded-lg shadow-md mb-4">
               <h2 className="text-xl font-semibold text-green-600 mb-2">Filters</h2>
               <label className="block text-gray-700 mb-1">Location</label>
-              <select name="location" className="w-full p-2 mb-4 border rounded" onChange={handleFilterChange}>
+              <select name="location" className="w-full p-2 mb-4 bg-gray-200" onChange={handleFilterChange}>
                 <option value="">Select Location</option>
                 <option value="Ernakulam">Ernakulam</option>
                 <option value="Kochi">Kochi</option>

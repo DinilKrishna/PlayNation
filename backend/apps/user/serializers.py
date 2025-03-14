@@ -52,13 +52,11 @@ class UserLoginSerializer(serializers.Serializer):
     def validate(self, data):
         email = data.get("email")
         password = data.get("password")
-        print("Received Data:", data)  # Debugging
         
         if not email or not password:
             raise serializers.ValidationError("Email and password are required.")
 
         user = authenticate(email=email, password=password)
-        print("Authenticated User:", user)  # Debugging
         
         if not user:
             raise serializers.ValidationError("Invalid credentials. Please try again.")
