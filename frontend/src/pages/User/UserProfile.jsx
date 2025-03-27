@@ -9,6 +9,17 @@
 
   const UserProfile = () => {
 
+    const dummyBookings = [
+      { id: 1, turf: "GreenField Turf", date: "2024-04-15", time: "5:00 PM", status: "Completed" },
+      { id: 2, turf: "PlayZone Arena", date: "2024-04-20", time: "7:00 PM", status: "Completed" },
+      { id: 3, turf: "Elite Sports Ground", date: "2024-05-10", time: "3:00 PM", status: "Upcoming" },
+      { id: 4, turf: "Victory Turf", date: "2024-05-15", time: "6:00 PM", status: "Upcoming" },
+      { id: 5, turf: "Champion Field", date: "2024-04-25", time: "4:00 PM", status: "Completed" },
+      { id: 6, turf: "Golden Goal Arena", date: "2024-05-05", time: "8:00 PM", status: "Cancelled" }
+    ];
+
+    const visibleBookings = dummyBookings.slice(0, 2);
+
     const navigate = useNavigate();
     const { isAuthenticated } = useAuthStore(); // Get auth state
 
@@ -32,6 +43,7 @@
     const [crop, setCrop] = useState({ x: 0, y: 0 });
     const [zoom, setZoom] = useState(1);
     const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [showAllBookings, setShowAllBookings] = useState(false);
 
     useEffect(() => {
       const fetchProfile = async () => {
@@ -42,7 +54,7 @@
               Authorization: `Bearer ${token}`,
             },
           });
-          console.log('lOGGED Response:', response);
+          // console.log('lOGGED Response:', response);
           
           // Construct full URL for profile picture
           // Remove '/api' from the base URL when constructing image URL
@@ -126,6 +138,8 @@
           // Update the profile picture with the URL from the response
           setProfilePic(response.data.profile_picture);
           setShowCropper(false);
+          alert('Profile changed successfully')
+
         } catch (error) {
           console.error("Full error:", error); // More detailed error log
           console.error("Error updating profile picture:", error);
@@ -158,10 +172,7 @@
     };
     
 
-    const dummyBookings = [
-      { id: 1, turf: "GreenField Turf", date: "2024-04-15", time: "5:00 PM" },
-      { id: 2, turf: "PlayZone Arena", date: "2024-04-20", time: "7:00 PM" },
-    ];
+    
 
     return (
       <div className="min-h-screen w-full bg-white text-gray-800 relative overflow-hidden">
@@ -252,54 +263,111 @@
             </div>
           )}
 
-          <div className="max-w-4xl mx-auto bg-gray-100 p-6 rounded-lg shadow-md flex">
-            <div className="w-1/3 border-r border-gray-300 p-4">
-              {["Profile", "Edit Details", "Booking"].map((tab) => (
-                <div
-                  key={tab}
-                  className={`cursor-pointer p-2 rounded mt-2 ${activeTab === tab ? "bg-green-600 text-white" : "bg-gray-200"}`}
-                  onClick={() => setActiveTab(tab)}
-                >
-                  {tab}
-                </div>
-              ))}
-            </div>
+<div className="max-w-4xl mx-auto bg-gray-100 p-6 rounded-lg shadow-md flex">
+          <div className="w-1/3 border-r border-gray-300 p-4">
+            {["Profile", "Edit Details", "Booking"].map((tab) => (
+              <div
+                key={tab}
+                className={`cursor-pointer p-2 rounded mt-2 ${activeTab === tab ? "bg-green-600 text-white" : "bg-gray-200"}`}
+                onClick={() => setActiveTab(tab)}
+              >
+                {tab}
+              </div>
+            ))}
+          </div>
 
-            <div className="w-2/3 p-2">
-              {activeTab === "Profile" && (
-                <div className="m-2">
-                  <p className="mt-4 text-gray-800 p-2 rounded">Username: {username}</p>
-                  <p className="mt-4 text-gray-800 p-2 rounded">Email: {email}</p>
-                  <p className="mt-4 text-gray-800 p-2 rounded">Phone: {phone}</p>
-                  <p className="mt-4 text-gray-800 p-2 rounded">Location: {location}</p>
-                </div>
-              )}
-              {activeTab === "Edit Details" && (
-                <div>
-                  <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 bg-gray-200 rounded mt-1" />
-                  <input type="text" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-2 bg-gray-200 rounded mt-1" />
-                  <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full p-2 bg-gray-200 rounded mt-1" />
-                  <button className="bg-green-600 text-white px-4 py-2 rounded mt-3 hover:bg-green-700" onClick={handleSaveDetails}>
-                    Save Changes
+          <div className="w-2/3 p-2">
+            {activeTab === "Profile" && (
+              <div className="m-2">
+                <p className="mt-4 text-gray-800 p-2 rounded">Username: {username}</p>
+                <p className="mt-4 text-gray-800 p-2 rounded">Email: {email}</p>
+                <p className="mt-4 text-gray-800 p-2 rounded">Phone: {phone}</p>
+                <p className="mt-4 text-gray-800 p-2 rounded">Location: {location}</p>
+              </div>
+            )}
+            {activeTab === "Edit Details" && (
+              <div>
+                <input type="text" placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} className="w-full p-2 bg-gray-200 rounded mt-1" />
+                <input type="text" placeholder="Phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="w-full p-2 bg-gray-200 rounded mt-1" />
+                <input type="text" placeholder="Location" value={location} onChange={(e) => setLocation(e.target.value)} className="w-full p-2 bg-gray-200 rounded mt-1" />
+                <button className="bg-green-600 text-white px-4 py-2 rounded mt-3 hover:bg-green-700" onClick={handleSaveDetails}>
+                  Save Changes
+                </button>
+              </div>
+            )}
+            {activeTab === "Booking" && (
+              <div>
+                <h2 className="text-2xl font-semibold text-green-600 mb-3">Booking History</h2>
+                {visibleBookings.map((booking) => (
+                  <div key={booking.id} className="mb-4 p-3 bg-white rounded-lg shadow-sm">
+                    <p className="font-semibold text-lg">{booking.turf}</p>
+                    <p className="text-sm text-gray-700">{booking.date} at {booking.time}</p>
+                    <span className={`text-xs px-2 py-1 rounded-full ${
+                      booking.status === "Completed" ? "bg-green-100 text-green-800" :
+                      booking.status === "Upcoming" ? "bg-blue-100 text-blue-800" :
+                      "bg-red-100 text-red-800"
+                    }`}>
+                      {booking.status}
+                    </span>
+                  </div>
+                ))}
+                
+                {dummyBookings.length > 2 && (
+                  <button 
+                    className="mt-4 bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700"
+                    onClick={() => setShowAllBookings(true)}
+                  >
+                    Load More
                   </button>
-                </div>
-              )}
-              {activeTab === "Booking" && (
-                <div>
-                  <h2 className="text-2xl font-semibold text-green-600 mb-3">Booking History</h2>
-                  {dummyBookings.map((booking) => (
-                    <div key={booking.id} className="mb-2">
-                      <p className="font-semibold">{booking.turf}</p>
-                      <p className="text-sm text-gray-700">{booking.date} at {booking.time}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </div>
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>
-    );
-  };
+
+      {/* All Bookings Modal */}
+      {showAllBookings && (
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-75 z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full max-h-[80vh] overflow-y-auto">
+            <div className="p-6">
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold text-green-600">All Bookings</h2>
+                <button 
+                  className="text-gray-500 hover:text-gray-700"
+                  onClick={() => setShowAllBookings(false)}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+              
+              <div className="space-y-4">
+                {dummyBookings.map((booking) => (
+                  <div key={booking.id} className="p-4 bg-gray-50 rounded-lg">
+                    <div className="flex justify-between items-start">
+                      <div>
+                        <p className="font-semibold text-lg">{booking.turf}</p>
+                        <p className="text-sm text-gray-600">{booking.date} at {booking.time}</p>
+                      </div>
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        booking.status === "Completed" ? "bg-green-100 text-green-800" :
+                        booking.status === "Upcoming" ? "bg-blue-100 text-blue-800" :
+                        "bg-red-100 text-red-800"
+                      }`}>
+                        {booking.status}
+                      </span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
   export default UserProfile;
