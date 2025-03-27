@@ -62,8 +62,28 @@ class UserProfileView(APIView):
 
     def put(self, request):
         try:
-            # print(f"PUT method called by: {request.user.email}")  
-            user_profile = UserProfile.objects.get(email=request.user.email)  # Use email for lookup
+            user_profile = UserProfile.objects.get(email=request.user.email)
+            
+            # Handle file upload separately
+            if 'profile_picture' in request.FILES:
+                print("Received profile picture upload")  # Debug log
+                print("Before save - profile_picture:", user_profile.profile_picture)  # Debug log
+                
+                user_profile.profile_picture = request.FILES['profile_picture']
+                user_profile.save()
+                
+                print("After save - profile_picture:", user_profile.profile_picture)  # Debug log
+                print("Absolute URL:", request.build_absolute_uri(user_profile.profile_picture.url))  # Debug log
+                
+                return Response({
+                    'profile_picture': request.build_absolute_uri(user_profile.profile_picture.url),
+                    'username': user_profile.username,
+                    'email': user_profile.email,
+                    'phone': user_profile.phone,
+                    'location': user_profile.location
+                })
+            
+            # Handle other fields
             serializer = UserProfileSerializer(user_profile, data=request.data, partial=True)
             if serializer.is_valid():
                 serializer.save()

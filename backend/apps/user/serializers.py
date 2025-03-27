@@ -80,6 +80,15 @@ class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
         fields = ['username', 'email', 'phone', 'profile_picture', 'location']
+        extra_kwargs = {
+            'profile_picture': {'required': False},
+            'email': {'read_only': True},
+        }
+
+    def get_profile_picture(self, obj):
+        if obj.profile_picture:
+            return self.context['request'].build_absolute_uri(obj.profile_picture.url)
+        return None
 
     def update(self, instance, validated_data):
         # Update profile fields

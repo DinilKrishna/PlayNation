@@ -19,8 +19,8 @@
     }, [isAuthenticated, navigate]);
     
     const [profilePic, setProfilePic] = useState(null);
-    const [username, setUsername] = useState(userImage);
-    const [imageSrc, setImageSrc] = useState(null);
+    const [username, setUsername] = useState("");
+    // const [imageSrc, setImageSrc] = useState(null);
     const [email, setEmail] = useState("");
     const [phone, setPhone] = useState("");
     const [location, setLocation] = useState("");
@@ -37,22 +37,30 @@
       const fetchProfile = async () => {
         try {
           const token = localStorage.getItem("accessToken");
-          const response = await axios.get("http://localhost:8000/api/user/profile/", {
+          const response = await axiosInstance.get("/user/profile/", {
             headers: {
               Authorization: `Bearer ${token}`,
             },
           });
-    
+          console.log('lOGGED Response:', response);
+          
+          // Construct full URL for profile picture
+          // Remove '/api' from the base URL when constructing image URL
+          const baseUrl = (axiosInstance.defaults.baseURL || window.location.origin)
+            .replace('/api', '');
+          
+          const profilePicUrl = response.data.profile_picture 
+            ? `${baseUrl}${response.data.profile_picture}`
+            : userImage;
+
           // Update state with fetched data
           setUsername(response.data.username || "");
           setEmail(response.data.email || "");
           setPhone(response.data.phone || "");
           setLocation(response.data.location || "");
-          setProfilePic(response.data.profile_picture || userImage);    
+          setProfilePic(profilePicUrl);
         } catch (error) {
           console.error("Error fetching profile:", error.response?.data || error.message);
-        } finally {
-          setLoading(false);
         }
       };
     
@@ -80,12 +88,12 @@
         const image = new Image();
         image.src = selectedImage;
         await image.decode();
-
+    
         const canvas = document.createElement("canvas");
         const ctx = canvas.getContext("2d");
         canvas.width = croppedAreaPixels.width;
         canvas.height = croppedAreaPixels.height;
-
+    
         ctx.drawImage(
           image,
           croppedAreaPixels.x,
@@ -97,10 +105,32 @@
           croppedAreaPixels.width,
           croppedAreaPixels.height
         );
-
+    
         const croppedImage = canvas.toDataURL("image/jpeg");
-        setProfilePic(croppedImage);
-        setShowCropper(false);
+        
+        try {
+          // Convert data URL to blob
+          const blob = await fetch(croppedImage).then(res => res.blob());
+          const formData = new FormData();
+          formData.append('profile_picture', blob, 'profile.jpg');
+          
+          const token = localStorage.getItem("accessToken");
+          const response = await axiosInstance.put("/user/profile/", formData, {
+            headers: {
+              'Authorization': `Bearer ${token}`,
+              'Content-Type': 'multipart/form-data',
+            },
+          });
+          
+          console.log("Backend response:", response.data); // Debug log
+          // Update the profile picture with the URL from the response
+          setProfilePic(response.data.profile_picture);
+          setShowCropper(false);
+        } catch (error) {
+          console.error("Full error:", error); // More detailed error log
+          console.error("Error updating profile picture:", error);
+          alert("Failed to update profile picture");
+        }
       }
     };
 
