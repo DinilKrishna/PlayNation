@@ -6,6 +6,7 @@ import Blog from "../pages/User/Blog";
 import Turfs from "../pages/User/Turfs";
 import Login from "../pages/User/Login";
 import Signup from "../pages/User/Signup";
+import UserProfile from "../pages/User/UserProfile";
 import React from "react";
 
 const AppRouter = () => {
@@ -19,6 +20,7 @@ const AppRouter = () => {
         <Route path="/blog" element={<Blog />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<Signup />} />
+        <Route path="/userprofile" element={<UserProfile />} />
       </Routes>
     </Router>
   );

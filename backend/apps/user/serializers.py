@@ -74,3 +74,16 @@ class UserLoginSerializer(serializers.Serializer):
                 "username": user.username,
             },
         }
+    
+
+class UserProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserProfile
+        fields = ['username', 'email', 'phone', 'profile_picture', 'location']
+
+    def update(self, instance, validated_data):
+        # Update profile fields
+        for attr, value in validated_data.items():
+            setattr(instance, attr, value)
+        instance.save()
+        return instance

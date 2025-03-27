@@ -23,7 +23,7 @@ const Home = () => {
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4">
             Welcome to PlayNation
           </h1>
-          <p className="text-xl sm:text-2xl md:text-3xl font-bold text-green-400">
+          <p className="text-xl sm:text-2xl md:text-3xl font-bold text-green-400 font-(family-name:helvetica>)">
             Your favourite playground is just a tap away.
           </p>
         </div>

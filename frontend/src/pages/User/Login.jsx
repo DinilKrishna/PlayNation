@@ -35,6 +35,7 @@ const Login = () => {
   
       if (response.access) {
         setToken(response.access); // Update Zustand store
+        console.log("Stored token:", localStorage.getItem("accessToken"));
         navigate("/turfs"); // Redirect after login
       } else {
         setError(response.error || "Invalid credentials.");
