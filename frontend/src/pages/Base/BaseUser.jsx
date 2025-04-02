@@ -1,5 +1,6 @@
 import React from 'react'
 import Navbar from '../../components/Navbar'
+import Footer from '../../components/Footer'
 
 const BaseUser = ({ children }) => {
   return (
@@ -9,6 +10,7 @@ const BaseUser = ({ children }) => {
         <div className="container mx-auto px-6 py-16 text-center my-10">
           {children}
         </div>
+        <Footer />
       </div>
     </div>
   )

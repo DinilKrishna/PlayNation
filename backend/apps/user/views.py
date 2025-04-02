@@ -80,7 +80,7 @@ class UserProfileView(APIView):
                     'username': user_profile.username,
                     'email': user_profile.email,
                     'phone': user_profile.phone,
-                    'location': user_profile.location
+                    'location': user_profile.location_name
                 })
             
             # Handle other fields

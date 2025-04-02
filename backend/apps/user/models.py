@@ -23,7 +23,10 @@ class UserProfile(AbstractBaseUser, PermissionsMixin):
     profile_picture = models.ImageField(upload_to="profile_pics/", blank=True, null=True)
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
-    location = models.CharField(null=True, blank=True)
+    
+    location_name = models.CharField(max_length=255, blank=True, null=True)
+    latitude = models.FloatField(blank=True, null=True)
+    longitude = models.FloatField(blank=True, null=True)
 
     objects = UserProfileManager()
 

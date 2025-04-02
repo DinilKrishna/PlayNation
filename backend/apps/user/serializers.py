@@ -79,7 +79,7 @@ class UserLoginSerializer(serializers.Serializer):
 class UserProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserProfile
-        fields = ['username', 'email', 'phone', 'profile_picture', 'location']
+        fields = ['username', 'email', 'phone', 'profile_picture', 'location_name', 'latitude', 'longitude']
         extra_kwargs = {
             'profile_picture': {'required': False},
             'email': {'read_only': True},

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useAuthStore from "../../store/authStore";
 import Navbar from "../../components/Navbar";
+import Footer from "../../components/Footer";
 import turfImage from "../../assets/turf.jpeg";
 
 const dummyTurfs = [
@@ -144,6 +145,7 @@ const Turfs = () => {
           </div>
         </div>
       </div>
+      <Footer />
     </div>
   );
 };
