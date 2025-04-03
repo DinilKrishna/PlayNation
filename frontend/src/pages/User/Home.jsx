@@ -37,7 +37,7 @@ const Home = () => {
           </div>
 
           {/* Booking Button */}
-          <Link to="/turfs">
+          <Link to="/turflist">
             <button className="bg-green-500 hover:bg-green-700 cursor-pointer text-white font-bold py-3 px-6 rounded-lg text-sm sm:text-base md:text-lg shadow-lg transition">
               Book Your Spot Now
             </button>

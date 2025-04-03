@@ -35,14 +35,26 @@ const Login = () => {
           response.data.refresh,
           3600 // Token expiration time in seconds
         );
-        navigate("/turfs");
+        navigate("/turflist");
       } else {
         setError(response.data.error || "Invalid credentials.");
       }
     } catch (error) {
-      console.error("Login Error:", error);
-      setError(error.response?.data?.detail || "Something went wrong. Please try again.");
-    }
+        console.error("Login Error:", error);
+      
+        if (error.response?.data) {
+          // Extract the first error message if available
+          const errorMessage =
+            error.response.data.detail || 
+            Object.values(error.response.data)[0] || 
+            "Something went wrong. Please try again.";
+      
+          setError(errorMessage);
+        } else {
+          setError("Something went wrong. Please try again.");
+        }
+      }
+      
   };
 
   return (
@@ -84,6 +96,10 @@ const Login = () => {
             Don't have an account yet?{' '}
             <Link to="/signup" className="text-green-500 hover:underline">
               Click here to signup
+            </Link>
+            <br />
+            <Link to='/adminlogin' className="text-red-500 hover:underline">
+                Admin Login
             </Link>
           </p>
         </div>
